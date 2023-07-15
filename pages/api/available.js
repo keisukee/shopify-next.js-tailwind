@@ -1,33 +1,35 @@
 export default async function send(req, res) {
   const {
     query: { id },
-  } = req
+  } = req;
 
-  const domain = process.env.SHOPIFY_STORE_DOMAIN
-  const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESSTOKEN
+  // const domain = process.env.SHOPIFY_STORE_DOMAIN
+  // const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESSTOKEN
+  const domain = 'urban-tech-hyd.myshopify.com';
+  const storefrontAccessToken = 'd1a56749a326236d307cffd2178ce494';
 
   async function ShopifyData(query) {
-    const URL = `https://${domain}/api/2022-10/graphql.json`
+    const URL = `https://${domain}/api/2022-10/graphql.json`;
 
     const options = {
       endpoint: URL,
-      method: "POST",
+      method: 'POST',
       headers: {
-        "X-Shopify-Storefront-Access-Token": storefrontAccessToken,
-        "Accept": "application/json",
-        "Content-Type": "application/json",
+        'X-Shopify-Storefront-Access-Token': storefrontAccessToken,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ query })
-    }
+      body: JSON.stringify({ query }),
+    };
 
     try {
-      const data = await fetch(URL, options).then(response => {
-        return response.json()
-      })
+      const data = await fetch(URL, options).then((response) => {
+        return response.json();
+      });
 
-      return data
+      return data;
     } catch (error) {
-      throw new Error("Products not fetched")
+      throw new Error('Products not fetched');
     }
   }
 
@@ -45,15 +47,15 @@ export default async function send(req, res) {
           }
         }
       }
-    }`
+    }`;
 
-    const response = await ShopifyData(query)
+    const response = await ShopifyData(query);
 
-    const product = response.data.product ? response.data.product : []
+    const product = response.data.product ? response.data.product : [];
 
-    return product
+    return product;
   }
 
-  const product = await getProduct(id)
-  res.json(product)
+  const product = await getProduct(id);
+  res.json(product);
 }
